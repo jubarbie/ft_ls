@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 15:34:00 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/15 16:10:49 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/16 23:07:10 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 
 # define OPT_REF "Ralrt"
 # define OPT param->opt
+# define RR (OPT & (1 << 0))
+# define A (OPT & (1 << 1))
+# define L (OPT & (1 << 2))
+# define R (OPT & (1 << 3))
+# define T (OPT & (1 << 4))
 # define L_SZ param->len_size
 # define L_LK param->len_link
 # define L_US param->len_usr
@@ -35,8 +40,8 @@ typedef struct	s_param
 t_param	*init_param(char opt);
 void    print_param(t_param *param);
 void    update_param(char *dir_name, t_param *param);
+void	print_lst(t_list *first, t_param *param);
 void	ft_ls(int ac, char **av, t_param *param);
-void	list_dir(char *dir_name, t_param *param);
 void	error_opt(char opt);
 
 #endif

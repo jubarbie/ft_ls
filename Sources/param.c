@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/15 15:59:35 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/15 16:30:40 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/16 22:57:49 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	update_param(char *dir_name, t_param *param)
 	len_gr = ft_strlen(getgrgid(ps->st_gid)->gr_name);
 	L_SZ = (len_size > L_SZ) ? len_size : L_SZ;
 	L_LK = (len_link > L_LK) ? len_link : L_LK;
-	L_US = (len_usr> L_US) ? len_usr : L_US;
+	L_US = (len_usr > L_US) ? len_usr : L_US;
 	L_GR = (len_gr > L_GR) ? len_gr : L_GR;
 	free(ps);
 }

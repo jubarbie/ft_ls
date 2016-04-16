@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 16:46:33 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/15 16:23:38 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/16 23:12:21 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,50 +19,7 @@
 #include "libft.h"
 #include "ft_ls.h"
 
-static void	to_display(char *dir_name, char opt)
-{
-	t_stat	*buf;
-
-	buf = malloc(sizeof(t_stat));
-	stat(dir_name, buf);
-	if (opt & (1 << 2))
-	{
-		if (buf->st_mode & S_IFDIR)
-			ft_putchar('d');
-		ft_putstr("---------  ");
-		ft_putnbr(buf->st_nlink);
-		ft_putstr(" ");
-		ft_putnbr(buf->st_uid);
-		ft_putstr("  ");
-		ft_putnbr(buf->st_gid);
-		ft_putstr("  ");
-		ft_putnbr(buf->st_size);
-		ft_putstr("  ");
-		ft_putstr(ctime(&buf->st_mtime));
-	}
-	else
-	{
-		ft_putstr(dir_name);
-		ft_putchar('\n');
-	}
-	free(buf);
-}
-
-static void	print_lst(t_list *elem, char opt)
-{
-	if (elem)
-	{
-		if ( !(opt & (1 << 3)) && ((opt & (1 << 1)) ||
-		(!(opt & (1 << 1)) && ft_strncmp(elem->content, ".", 1))))
-			to_display(elem->content, opt);
-		print_lst(elem->next, opt);
-		if ((opt & (1 << 3)) && ((opt & (1 << 1)) ||
-		(!(opt & (1 << 1)) && ft_strncmp(elem->content, ".", 1))))
-			to_display(elem->content, opt);
-	}
-}
-
-static void	lst_insert_sort_time(t_list **first, char *dir_name, int len)
+static void		lst_insert_sort_time(t_list **first, char *dir_name, int len)
 {
 	t_list	*elem;
 	t_list	*new;
@@ -77,7 +34,7 @@ static void	lst_insert_sort_time(t_list **first, char *dir_name, int len)
 		*first = new;
 	else
 	{
-		stat((*first)->content, b_elem);	
+		stat((*first)->content, b_elem);
 		if (b_new->st_mtimespec.tv_sec > b_elem->st_mtimespec.tv_sec)
 		{
 			new->next = *first;
@@ -90,7 +47,7 @@ static void	lst_insert_sort_time(t_list **first, char *dir_name, int len)
 					b_new->st_mtimespec.tv_sec <= b_elem->st_mtimespec.tv_sec)
 			{
 				elem = elem->next;
-				stat(elem->content, b_elem);	
+				stat(elem->content, b_elem);
 			}
 			new->next = elem->next;
 			elem->next = new;
@@ -99,13 +56,15 @@ static void	lst_insert_sort_time(t_list **first, char *dir_name, int len)
 	free(b_elem);
 }
 
-static void	lst_insert_sort_alpha(t_list **first, char *dir_name, int len, t_param *param)
+static void		lst_insert_sort_alpha(t_list **first, char *dir_name, int len, t_param *param)
 {
 	t_list	*elem;
 	t_list	*new;
 
 	new = ft_lstnew(dir_name, len);
-	update_param(dir_name, param);
+	//update_param(dir_name, param);
+	param++;
+	param--;
 	if (!*first)
 		*first = new;
 	else
@@ -126,7 +85,7 @@ static void	lst_insert_sort_alpha(t_list **first, char *dir_name, int len, t_par
 	}
 }
 
-void			list_dir(char *dir_name, t_param *param)
+static t_list	*list_dir(char *dir_name, t_param *param)
 {
 	DIR				*dir;
 	struct dirent	*file;
@@ -139,36 +98,48 @@ void			list_dir(char *dir_name, t_param *param)
 		first = NULL;
 		while ((file = readdir(dir)))
 		{
-			if (OPT & (1 << 4))
+			if (T && (A || (!A && ft_strncmp(file->d_name, ".", 1))))
 				lst_insert_sort_time(&first, file->d_name, file->d_namlen + 1);
-			else
+			else if (A || (!A && file->d_name[0] != '.'))
 				lst_insert_sort_alpha(&first, file->d_name, file->d_namlen + 1, param);
 		}
-		print_lst(first, OPT);
+		print_lst(first, param);
 		closedir(dir);
+		return (first);
 	}
+	return (0);
 }
 
-void		ft_ls(int ac, char **av, t_param *param)
+void			ft_ls(int ac, char **av, t_param *param)
 {
-	if (ac > 0)
-	{
-		if (!(OPT & (1 << 3)))
+	t_list	*first;
+	char	*curent;
+	t_stat	*ps;
+
+	if (!R)
+		first = list_dir(*av, param);
+	if (ac > 1)
+		ft_ls(--ac, av + 1, param);
+	if (R)
+		first = list_dir(*av, param);
+	if (RR)	
+		while (first)
 		{
-			ft_putstr(*(av + 1));
-			ft_putstr(":\n");
-			list_dir(*(av + 1), param);
-			if (ac != 1)
+			ps = malloc(sizeof(t_stat));
+			curent = ft_strdup(*av);
+			curent = ft_strjoin(curent, "/");
+			curent = ft_strjoin(curent, first->content);
+			stat(curent, ps);
+			if (S_ISDIR(ps->st_mode) && ft_strcmp(first->content, ".") &&
+		ft_strcmp(first->content, "..") && ft_strncmp(first->content, ".", 1))
+			{
 				ft_putchar('\n');
+				ft_putstr(curent);
+				ft_putstr(":\n");
+				ft_ls(1, &curent, param);
+			}
+			free(curent);
+			free(ps);
+			first = first->next;
 		}
-		ft_ls(--ac, ++av, param);
-		if (OPT & (1 << 3))
-		{
-			ft_putstr(*av);
-			ft_putstr(":\n");
-			list_dir(*av, param);
-			if (ac == 0)
-				ft_putchar('\n');
-		}
-	}
 }
