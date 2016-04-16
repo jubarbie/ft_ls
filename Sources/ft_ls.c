@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 16:46:33 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/16 23:12:21 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/16 23:24:46 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ static void		lst_insert_sort_time(t_list **first, char *dir_name, int len)
 	free(b_elem);
 }
 
-static void		lst_insert_sort_alpha(t_list **first, char *dir_name, int len, t_param *param)
+static void		lst_insert_sort_alpha(t_list **first, char *dir_name, int len,
+				t_param *param)
 {
 	t_list	*elem;
 	t_list	*new;
@@ -101,7 +102,8 @@ static t_list	*list_dir(char *dir_name, t_param *param)
 			if (T && (A || (!A && ft_strncmp(file->d_name, ".", 1))))
 				lst_insert_sort_time(&first, file->d_name, file->d_namlen + 1);
 			else if (A || (!A && file->d_name[0] != '.'))
-				lst_insert_sort_alpha(&first, file->d_name, file->d_namlen + 1, param);
+				lst_insert_sort_alpha(&first, file->d_name, file->d_namlen + 1,
+										param);
 		}
 		print_lst(first, param);
 		closedir(dir);
@@ -122,7 +124,7 @@ void			ft_ls(int ac, char **av, t_param *param)
 		ft_ls(--ac, av + 1, param);
 	if (R)
 		first = list_dir(*av, param);
-	if (RR)	
+	if (RR)
 		while (first)
 		{
 			ps = malloc(sizeof(t_stat));
@@ -133,9 +135,7 @@ void			ft_ls(int ac, char **av, t_param *param)
 			if (S_ISDIR(ps->st_mode) && ft_strcmp(first->content, ".") &&
 		ft_strcmp(first->content, "..") && ft_strncmp(first->content, ".", 1))
 			{
-				ft_putchar('\n');
-				ft_putstr(curent);
-				ft_putstr(":\n");
+				print_folder_name(curent);
 				ft_ls(1, &curent, param);
 			}
 			free(curent);

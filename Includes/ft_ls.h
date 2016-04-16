@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 15:34:00 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/16 23:07:10 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/16 23:22:22 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_param	*init_param(char opt);
 void    print_param(t_param *param);
 void    update_param(char *dir_name, t_param *param);
 void	print_lst(t_list *first, t_param *param);
+void	print_folder_name(char *str);
 void	ft_ls(int ac, char **av, t_param *param);
 void	error_opt(char opt);
 

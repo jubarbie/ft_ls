@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/16 23:04:48 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/16 23:10:00 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/16 23:23:11 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,11 @@ void		print_lst(t_list *elem, t_param *param)
 		if (R)
 			to_display(elem->content, param);
 	}
+}
+
+void		print_folder_name(char *str)
+{
+	ft_putchar('\n');
+	ft_putstr(str);
+	ft_putstr(":\n");
 }
