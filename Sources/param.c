@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/15 15:59:35 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/17 15:27:28 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/17 16:59:31 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,6 @@ void	update_param(char *dir_name, t_param *param)
 	stat(dir_name, &ps);
 	l_size = ft_nblen(ps.st_size);
 	l_link = ft_nblen(ps.st_nlink);
-	/*printf("size::%lld\n", ps.st_size);
-	printf("link::%d\n", ps.st_nlink);
-	printf("uid:%d\n", ps.st_uid);
-	printf("grid:%d\n", ps.st_gid);
-	printf("%s\n", getpwuid(ps.st_uid)->pw_name);
-	printf("%s\n", getgrgid(ps.st_gid)->gr_name);*/
 	l_usr = ft_strlen(getpwuid(ps.st_uid)->pw_name);
 	l_gr = ft_strlen(getgrgid(ps.st_gid)->gr_name);
 	L_SZ = (l_size > L_SZ) ? l_size : L_SZ;

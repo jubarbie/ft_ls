@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 15:34:00 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/17 15:51:53 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/17 17:00:01 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct	s_param
 	char	ac;
 }				t_param;
 
-int		ft_nblen(int nb);
+int		ft_nblen(long long int nb);
 
 t_param	*init_param(char opt);
 void    print_param(t_param *param);
