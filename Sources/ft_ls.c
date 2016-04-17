@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 16:46:33 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/16 23:24:46 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/17 16:40:15 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,12 @@ static void		lst_insert_sort_alpha(t_list **first, char *dir_name, int len,
 {
 	t_list	*elem;
 	t_list	*new;
+	char	*dir;
 
 	new = ft_lstnew(dir_name, len);
-	//update_param(dir_name, param);
-	param++;
-	param--;
+	dir = ft_strjoin(C_DIR, dir_name);
+	if (ft_strcmp(dir_name, ".") && ft_strcmp(dir_name, ".."))
+		update_param(dir, param);
 	if (!*first)
 		*first = new;
 	else
@@ -93,9 +94,13 @@ static t_list	*list_dir(char *dir_name, t_param *param)
 	t_list			*first;
 
 	if (!(dir = opendir(dir_name)))
+	{
+		ft_putstr("./ft_ls: ");
 		perror(dir_name);
+	}
 	else
 	{
+		C_DIR = ft_strjoin(dir_name, "/");
 		first = NULL;
 		while ((file = readdir(dir)))
 		{
@@ -119,23 +124,31 @@ void			ft_ls(int ac, char **av, t_param *param)
 	t_stat	*ps;
 
 	if (!R)
+	{
+		if (AC > 1)
+			print_folder_name(*av, param);
 		first = list_dir(*av, param);
+	}
 	if (ac > 1)
 		ft_ls(--ac, av + 1, param);
 	if (R)
+	{
+		if (AC > 1)
+			print_folder_name(*av, param);
 		first = list_dir(*av, param);
+	}
 	if (RR)
 		while (first)
 		{
 			ps = malloc(sizeof(t_stat));
-			curent = ft_strdup(*av);
-			curent = ft_strjoin(curent, "/");
+			curent = ft_strjoin(*av, "/");
 			curent = ft_strjoin(curent, first->content);
 			stat(curent, ps);
 			if (S_ISDIR(ps->st_mode) && ft_strcmp(first->content, ".") &&
 		ft_strcmp(first->content, "..") && ft_strncmp(first->content, ".", 1))
 			{
-				print_folder_name(curent);
+				if (AC <= 1)
+					print_folder_name(curent, param);
 				ft_ls(1, &curent, param);
 			}
 			free(curent);

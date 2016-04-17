@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 15:36:05 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/15 15:58:32 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/17 14:34:19 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	error_opt(char opt)
 {
-	ft_putstr("ls: illegal option -- ");
+	ft_putstr("./ft_ls: illegal option -- ");
 	ft_putchar(opt);
 	ft_putstr("\nusage: ls [-");
 	ft_putstr(OPT_REF);

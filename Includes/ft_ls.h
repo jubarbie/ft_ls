@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 15:34:00 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/16 23:22:22 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/17 15:51:53 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 # define L_LK param->len_link
 # define L_US param->len_usr
 # define L_GR param->len_gr
-# define C_DIR pram->c_dir
+# define C_DIR param->c_dir
+# define AC param->ac
 
 typedef struct stat	t_stat;
 typedef struct	s_param
@@ -35,13 +36,16 @@ typedef struct	s_param
 	int		len_usr;
 	int		len_gr;
 	char	*c_dir;
+	char	ac;
 }				t_param;
+
+int		ft_nblen(int nb);
 
 t_param	*init_param(char opt);
 void    print_param(t_param *param);
 void    update_param(char *dir_name, t_param *param);
 void	print_lst(t_list *first, t_param *param);
-void	print_folder_name(char *str);
+void	print_folder_name(char *str, t_param *param);
 void	ft_ls(int ac, char **av, t_param *param);
 void	error_opt(char opt);
 

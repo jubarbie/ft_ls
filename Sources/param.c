@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/15 15:59:35 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/16 22:57:49 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/17 15:27:28 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,24 +48,27 @@ int		ft_nblen(long long int nb)
 
 void	update_param(char *dir_name, t_param *param)
 {
-	t_stat	*ps;
-	int		len_size;
-	int		len_link;
-	int		len_usr;
-	int		len_gr;
+	t_stat	ps;
+	int		l_size;
+	int		l_link;
+	int		l_usr;
+	int		l_gr;
 
-	if (!(ps = malloc(sizeof(t_stat))))
-		exit(EXIT_FAILURE);
-	stat(dir_name, ps);
-	len_size = ft_nblen(ps->st_size);
-	len_link = ft_nblen(ps->st_nlink);
-	len_usr = ft_strlen(getpwuid(ps->st_uid)->pw_name);
-	len_gr = ft_strlen(getgrgid(ps->st_gid)->gr_name);
-	L_SZ = (len_size > L_SZ) ? len_size : L_SZ;
-	L_LK = (len_link > L_LK) ? len_link : L_LK;
-	L_US = (len_usr > L_US) ? len_usr : L_US;
-	L_GR = (len_gr > L_GR) ? len_gr : L_GR;
-	free(ps);
+	stat(dir_name, &ps);
+	l_size = ft_nblen(ps.st_size);
+	l_link = ft_nblen(ps.st_nlink);
+	/*printf("size::%lld\n", ps.st_size);
+	printf("link::%d\n", ps.st_nlink);
+	printf("uid:%d\n", ps.st_uid);
+	printf("grid:%d\n", ps.st_gid);
+	printf("%s\n", getpwuid(ps.st_uid)->pw_name);
+	printf("%s\n", getgrgid(ps.st_gid)->gr_name);*/
+	l_usr = ft_strlen(getpwuid(ps.st_uid)->pw_name);
+	l_gr = ft_strlen(getgrgid(ps.st_gid)->gr_name);
+	L_SZ = (l_size > L_SZ) ? l_size : L_SZ;
+	L_LK = (l_link > L_LK) ? l_link : L_LK;
+	L_US = (l_usr > L_US) ? l_usr : L_US;
+	L_GR = (l_gr > L_GR) ? l_gr : L_GR;
 }
 
 void	free_param(t_param *param)
@@ -84,5 +87,6 @@ t_param	*init_param(char opt)
 	L_LK = 0;
 	L_US = 0;
 	L_GR = 0;
+	AC = 0;
 	return (param);
 }
