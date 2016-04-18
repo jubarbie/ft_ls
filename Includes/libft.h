@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/19 09:31:33 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/15 15:49:58 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/18 19:33:41 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,6 @@ unsigned int	ft_sqrt_up(unsigned int n);
 char			*ft_convert_base(char *nbr, char *base_from, char *base_to);
 char			*ft_strrev(char *str);
 int				ft_power_two(unsigned int power);
+int				ft_nbrlen(long long int nb);
 
 #endif

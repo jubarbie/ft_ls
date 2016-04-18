@@ -6,11 +6,12 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/18 09:09:56 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/18 10:41:37 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/18 16:53:54 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include "libft.h"
 #include "ft_ls.h"
@@ -32,11 +33,17 @@ t_dirinfos	*new_dirinfos(char *dir_name, t_param *param)
 	t_dirinfos	*infos;
 
 	if (!(infos = malloc(sizeof(t_dirinfos))) ||
-		!(infos->s = malloc(sizeof(t_stat))))
+		!(D_STAT = malloc(sizeof(t_stat))))
 		exit(EXIT_FAILURE);
-	infos->path = ft_strjoin(C_DIR, dir_name);
-	infos->dir_name = ft_strdup(dir_name);
-	stat(infos->path, infos->s);
-	update_param(infos->path, param);
+	D_PATH = ft_strjoin(C_DIR, dir_name);
+	D_NAME = ft_strdup(dir_name);
+	if (lstat(D_PATH, D_STAT) == -1)
+	{
+		perror(dir_name);
+		free_dirinfos(infos, sizeof(*infos));
+		return (NULL);
+	}
+	else if (ft_strcmp(D_NAME, ".") && ft_strcmp(D_NAME, ".."))
+		update_param(infos->path, param);
 	return (infos);
 }

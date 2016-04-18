@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 11:54:04 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/18 09:29:14 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/18 18:04:36 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ int				main(int ac, char **av)
 	i = get_options(ac, av, &opt);
 	param = init_param(opt);
 	dir = ft_strdup(".");
-	AC= ac - i;
+	AC = ac - i;
 	if (ac - i == 0)
 		ft_ls(1, &dir, param);
 	else
 		ft_ls(ac - i, &(av[i]), param);
-	//print_param(param);
+	free(C_DIR);
 	free(param);
 	free(dir);
 	return (0);
