@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/16 23:04:48 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/17 16:55:13 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/18 09:51:33 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,39 +79,21 @@ static void	get_mode(char *str, t_stat *buf)
 	str[10] = ' ';
 }
 
-static void	to_display(char *dir_name, t_param *param)
+static void	to_display(t_dirinfos *infos, t_param *param)
 {
-	t_stat	buf;
 	char	*str;
 	char	*pstr;
-	char	*dir;
 
 	str = ft_strnew(31 + L_SZ + L_LK + L_US + L_GR);
 	pstr = str;
-	dir = ft_strjoin(C_DIR, dir_name);
-	stat(dir, &buf);
 	if (L)
 	{
-		get_mode(pstr, &buf);
-		get_infos(pstr, &buf, param);
+		get_mode(pstr, D_STAT);
+		get_infos(pstr, D_STAT, param);
 		ft_putstr(str);
-		ft_putstr(dir_name);
-		ft_putchar('\n');
-		/*ft_putnbr(buf.st_nlink);
-		ft_putstr(" ");
-		ft_putnbr(buf.st_uid);
-		ft_putstr("  ");
-		ft_putnbr(buf.st_gid);
-		ft_putstr("  ");
-		ft_putnbr(buf.st_size);
-		ft_putstr("  ");
-		ft_putstr(ctime(&(buf.st_mtime)));*/
 	}
-	else
-	{
-		ft_putstr(dir_name);
-		ft_putchar('\n');
-	}
+	ft_putstr(D_NAME);
+	ft_putchar('\n');
 	free(str);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 16:46:33 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/17 16:40:15 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/18 10:44:13 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
 #include "libft.h"
 #include "ft_ls.h"
 
-static void		lst_insert_sort_time(t_list **first, char *dir_name, int len)
+static void		lst_insert_sort_time(t_list **first, char *dir_name)
 {
 	t_list	*elem;
 	t_list	*new;
 	t_stat	*b_elem;
 	t_stat	*b_new;
 
-	new = ft_lstnew(dir_name, len);
+	new = ft_lstnew(dir_name, 10);
 	b_elem = malloc(sizeof(struct stat));
 	b_new = malloc(sizeof(struct stat));
 	stat(new->content, b_new);
@@ -56,22 +56,20 @@ static void		lst_insert_sort_time(t_list **first, char *dir_name, int len)
 	free(b_elem);
 }
 
-static void		lst_insert_sort_alpha(t_list **first, char *dir_name, int len,
+static void		lst_insert_sort_alpha(t_list **first, char *dir_name,
 				t_param *param)
 {
-	t_list	*elem;
-	t_list	*new;
-	char	*dir;
+	t_list		*elem;
+	t_list		*new;
+	t_dirinfos	*infos;
 
-	new = ft_lstnew(dir_name, len);
-	dir = ft_strjoin(C_DIR, dir_name);
-	if (ft_strcmp(dir_name, ".") && ft_strcmp(dir_name, ".."))
-		update_param(dir, param);
+	infos = new_dirinfos(dir_name, param);
+	new = ft_lstnew(infos, sizeof(*infos));
 	if (!*first)
 		*first = new;
 	else
 	{
-		if (ft_strcmp((*first)->content, dir_name) >= 0)
+		if (ft_strcmp(((t_dirinfos *)(*first)->content)->dir_name, dir_name) >= 0)
 		{
 			new->next = *first;
 			*first = new;
@@ -79,7 +77,7 @@ static void		lst_insert_sort_alpha(t_list **first, char *dir_name, int len,
 		else
 		{
 			elem = *first;
-			while (elem->next && (ft_strcmp(elem->next->content, dir_name) < 0))
+			while (elem->next && (ft_strcmp(((t_dirinfos *)elem->next->content)->dir_name, dir_name) < 0))
 				elem = elem->next;
 			new->next = elem->next;
 			elem->next = new;
@@ -105,10 +103,9 @@ static t_list	*list_dir(char *dir_name, t_param *param)
 		while ((file = readdir(dir)))
 		{
 			if (T && (A || (!A && ft_strncmp(file->d_name, ".", 1))))
-				lst_insert_sort_time(&first, file->d_name, file->d_namlen + 1);
+				lst_insert_sort_time(&first, file->d_name);
 			else if (A || (!A && file->d_name[0] != '.'))
-				lst_insert_sort_alpha(&first, file->d_name, file->d_namlen + 1,
-										param);
+				lst_insert_sort_alpha(&first, file->d_name, param);
 		}
 		print_lst(first, param);
 		closedir(dir);
@@ -119,9 +116,9 @@ static t_list	*list_dir(char *dir_name, t_param *param)
 
 void			ft_ls(int ac, char **av, t_param *param)
 {
-	t_list	*first;
-	char	*curent;
-	t_stat	*ps;
+	t_list		*first;
+	t_list		*elem;
+	t_dirinfos	*infos;
 
 	if (!R)
 	{
@@ -138,21 +135,20 @@ void			ft_ls(int ac, char **av, t_param *param)
 		first = list_dir(*av, param);
 	}
 	if (RR)
-		while (first)
+	{
+		elem = first;
+		while (elem)
 		{
-			ps = malloc(sizeof(t_stat));
-			curent = ft_strjoin(*av, "/");
-			curent = ft_strjoin(curent, first->content);
-			stat(curent, ps);
-			if (S_ISDIR(ps->st_mode) && ft_strcmp(first->content, ".") &&
-		ft_strcmp(first->content, "..") && ft_strncmp(first->content, ".", 1))
+			infos = elem->content;
+			if (S_ISDIR(D_STAT->st_mode) && ft_strcmp(D_NAME, ".") &&
+				ft_strcmp(D_NAME, "..") && ft_strncmp(D_NAME, ".", 1))
 			{
 				if (AC <= 1)
-					print_folder_name(curent, param);
-				ft_ls(1, &curent, param);
+					print_folder_name(D_PATH, param);
+				ft_ls(1, &(D_PATH), param);
 			}
-			free(curent);
-			free(ps);
-			first = first->next;
+			elem = elem->next;
 		}
+		ft_lstdel(&first, &free_dirinfos);
+	}
 }

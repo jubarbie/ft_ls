@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 15:34:00 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/17 17:00:01 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/18 10:40:39 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 # define L_US param->len_usr
 # define L_GR param->len_gr
 # define C_DIR param->c_dir
+# define D_NAME infos->dir_name
+# define D_PATH infos->path
+# define D_STAT infos->s
 # define AC param->ac
 
 typedef struct stat	t_stat;
@@ -38,15 +41,25 @@ typedef struct	s_param
 	char	*c_dir;
 	char	ac;
 }				t_param;
+typedef struct	s_dirinfos
+{
+	char	*path;
+	char	*dir_name;
+	t_stat	*s;
+}				t_dirinfos;
 
-int		ft_nblen(long long int nb);
+int			ft_nblen(long long int nb);
 
-t_param	*init_param(char opt);
-void    print_param(t_param *param);
-void    update_param(char *dir_name, t_param *param);
-void	print_lst(t_list *first, t_param *param);
-void	print_folder_name(char *str, t_param *param);
-void	ft_ls(int ac, char **av, t_param *param);
-void	error_opt(char opt);
+t_param		*init_param(char opt);
+void    	print_param(t_param *param);
+void    	update_param(char *dir_name, t_param *param);
+
+t_dirinfos	*new_dirinfos(char *dir_name, t_param *param);
+void		free_dirinfos(void *infos, unsigned long t_size);
+
+void		print_lst(t_list *first, t_param *param);
+void		print_folder_name(char *str, t_param *param);
+void		ft_ls(int ac, char **av, t_param *param);
+void		error_opt(char opt);
 
 #endif
