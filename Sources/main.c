@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 11:54:04 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/18 18:04:36 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/19 16:48:52 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,26 @@
 #include <stdio.h>
 #include "libft.h"
 #include "ft_ls.h"
+
+static void		sort_attr(int ac, char **av)
+{
+	char	*temp;
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < ac - 1)
+	{
+		j = i;
+		while (++j < ac)
+			if (ft_strcmp(av[i], av[j]) > 0)
+			{
+				temp = av[i];
+				av[i] = av[j];
+				av[j] = temp;
+			}
+	}
+}
 
 static int		in_opt(char c)
 {
@@ -65,7 +85,10 @@ int				main(int ac, char **av)
 	if (ac - i == 0)
 		ft_ls(1, &dir, param);
 	else
+	{
+		sort_attr(ac - i, &(av[i]));
 		ft_ls(ac - i, &(av[i]), param);
+	}
 	free(C_DIR);
 	free(param);
 	free(dir);

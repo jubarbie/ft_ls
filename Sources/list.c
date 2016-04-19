@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/18 18:05:13 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/18 21:04:43 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/19 19:12:56 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <errno.h>
 #include "libft.h"
 #include "ft_ls.h"
 
@@ -25,8 +26,8 @@ static void	sort_time(t_list **first, t_list *new)
 	t_dirinfos	*infos;
 
 	infos = new->content;
-	if (((t_dirinfos *)(*first)->content)->s->st_mtimespec.tv_nsec <
-			D_STAT->st_mtimespec.tv_nsec)
+	if (((t_dirinfos *)(*first)->content)->s->st_mtimespec.tv_sec <
+			D_STAT->st_mtimespec.tv_sec)
 	{
 		new->next = *first;
 		*first = new;
@@ -35,12 +36,9 @@ static void	sort_time(t_list **first, t_list *new)
 	{
 		elem = *first;
 		while (elem->next &&
-				((t_dirinfos *)elem->content)->s->st_mtimespec.tv_nsec >
-				D_STAT->st_mtimespec.tv_nsec)
-		{
-			infos = elem->content;
+				((t_dirinfos *)elem->next->content)->s->st_mtimespec.tv_sec >
+				D_STAT->st_mtimespec.tv_sec)
 			elem = elem->next;
-		}
 		new->next = elem->next;
 		elem->next = new;
 	}
@@ -94,7 +92,10 @@ t_list		*list_dir(char *dir_name, t_param *param)
 	DIR				*dir;
 	struct dirent	*file;
 	t_list			*first;
+	t_stat			ps;
 
+	if (lstat(dir_name, &ps) != -1 && S_ISDIR(ps.st_mode))
+	{	
 	if (!(dir = opendir(dir_name)))
 		error_open(dir_name, param);
 	else
@@ -112,6 +113,11 @@ t_list		*list_dir(char *dir_name, t_param *param)
 		closedir(dir);
 		ITER++;
 		return (first);
+	}
+	}
+	else
+	{
+		ft_putendl(dir_name);
 	}
 	return (0);
 }

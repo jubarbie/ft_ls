@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/18 17:50:08 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/18 21:04:24 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/19 16:30:58 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,22 @@ static void	get_rights(char *str, t_stat *buf, t_dirinfos *infos)
 	str[1] = (S_IRUSR & (buf->st_mode)) ? 'r' : '-';
 	str[2] = (S_IWUSR & (buf->st_mode)) ? 'w' : '-';
 	str[3] = (S_IXUSR & (buf->st_mode)) ? 'x' : '-';
+	str[3] = (str[3] == 'x' && (S_ISUID & (buf->st_mode))) ? 's' : str[3];
+	str[3] = (str[3] == '-' && (S_ISUID & (buf->st_mode))) ? 'S' : str[3];
 	str[4] = (S_IRGRP & (buf->st_mode)) ? 'r' : '-';
 	str[5] = (S_IWGRP & (buf->st_mode)) ? 'w' : '-';
 	str[6] = (S_IXGRP & (buf->st_mode)) ? 'x' : '-';
+	str[6] = (str[6] == 'x' && (S_ISGID & (buf->st_mode))) ? 's' : str[6];
+	str[6] = (str[6] == '-' && (S_ISGID & (buf->st_mode))) ? 'S' : str[6];
 	str[7] = (S_IROTH & (buf->st_mode)) ? 'r' : '-';
 	str[8] = (S_IWOTH & (buf->st_mode)) ? 'w' : '-';
 	str[9] = (S_IXOTH & (buf->st_mode)) ? 'x' : '-';
-	str[9] = (str[3] == '-' && (S_ISUID & (buf->st_mode)) &&
-			str[6] == '-' && (S_ISGID & (buf->st_mode))) ? 'S' : str[9];
-	str[9] = (str[3] == 'x' && (S_ISUID & (buf->st_mode)) &&
-			str[6] == 'x' && (S_ISGID & (buf->st_mode))) ? 's' : str[9];
-	str[9] = (str[9] == '-' && (buf->st_mode & S_ISVTX)) ? 'T' : str[9];
 	str[9] = (str[9] != '-' && (buf->st_mode & S_ISVTX)) ? 't' : str[9];
+	str[9] = (str[9] == '-' && (buf->st_mode & S_ISVTX)) ? 'T' : str[9];
 	acl = acl_get_file(D_PATH, ACL_TYPE_EXTENDED);
 	str[10] = (acl) ? '+' : ' ';
-	str[10] = (listxattr(D_PATH, lst, 2, XATTR_NOFOLLOW) == -1) ? '@' : str[10];
+	listxattr(D_PATH, lst, 2, XATTR_NOFOLLOW);
+	str[10] = (*lst) ? '@' : str[10];
 	acl_free((void *)acl);
 	free(lst);
 }
