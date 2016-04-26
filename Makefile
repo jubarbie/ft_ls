@@ -6,7 +6,7 @@
 #    By: jubarbie <jubarbie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/10/30 16:51:35 by jubarbie          #+#    #+#              #
-#    Updated: 2016/04/18 21:09:32 by jubarbie         ###   ########.fr        #
+#    Updated: 2016/04/21 17:21:17 by jubarbie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,8 @@ SRC=	Sources/main.c \
 		Sources/display.c \
 		Sources/display_long.c \
 		Sources/list.c \
+		Sources/cmp.c \
+		Sources/sort_arg.c \
 		Sources/ft_ls.c \
 		Sources/error.c
 OBJ=$(SRC:.c=.o)

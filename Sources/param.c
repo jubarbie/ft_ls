@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/15 15:59:35 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/19 19:03:19 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/26 15:32:45 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,38 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <grp.h>
+#include <sys/types.h>
 #include <pwd.h>
 #include "libft.h"
 #include "ft_ls.h"
 
-void	reinit_param(t_param *param)
+void	reinit_param(char *dir_name, t_param *param)
 {
 	L_SZ = 0;
+	L_MA = 0;
+	L_MI = 0;
 	L_LK = 0;
 	L_US = 0;
 	L_GR = 0;
 	BLOCK = 0;
+	free(C_DIR);
+	C_DIR = (ft_strcmp(dir_name, "/")) ? ft_strjoin(dir_name, "/") :
+												ft_strjoin(dir_name, "");
+	ITER++;
+}
+
+void	update_param_mima(char *dir_name, t_param *param)
+{
+	t_stat	ps;
+	int		ma;
+	int		mi;
+
+	lstat(dir_name, &ps);
+	ma = major(ps.st_rdev);
+	mi = minor(ps.st_rdev);
+	L_MA = (ft_nbrlen(ma) > L_MA) ? ft_nbrlen(ma) : L_MA;
+	L_MI = (ft_nbrlen(mi) > L_MI) ? ft_nbrlen(mi) : L_MI;
+	L_SZ = L_MA + L_MI + 3;
 }
 
 void	update_param(char *dir_name, t_param *param)
@@ -52,10 +73,11 @@ void	update_param(char *dir_name, t_param *param)
 
 void	free_param(t_param *param)
 {
+	free(C_DIR);
 	free(param);
 }
 
-t_param	*init_param(char opt)
+t_param	*init_param(char opt, int ac)
 {
 	t_param	*param;
 
@@ -63,10 +85,12 @@ t_param	*init_param(char opt)
 		exit(EXIT_FAILURE);
 	OPT = opt;
 	L_SZ = 0;
+	L_MA = 0;
+	L_MI = 0;
 	L_LK = 0;
 	L_US = 0;
 	L_GR = 0;
-	AC = 0;
+	AC = ac;
 	BLOCK = 0;
 	ITER = 0;
 	C_DIR = ft_strnew(0);

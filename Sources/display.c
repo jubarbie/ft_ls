@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/16 23:04:48 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/19 16:24:03 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/26 16:46:40 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,30 @@
 #include "libft.h"
 #include "ft_ls.h"
 
-static void	to_display(t_dirinfos *infos, t_param *param, int iter)
+void		put_total(t_param *param)
+{
+	ft_putstr("total ");
+	ft_putnbr(BLOCK);
+	ft_putchar('\n');
+}
+
+void		to_display(t_dirinfos *infos, t_param *param, int iter)
 {
 	char	*str;
-	char	*pstr;
 	int		len;
 	char	*link;
 
 	if (!(str = ft_strnew(31 + L_SZ + L_LK + L_US + L_GR)) ||
 			!(link = ft_strnew(1024)))
 		exit(EXIT_FAILURE);
-	pstr = str;
 	if (L)
 	{
 		if (!iter)
 			put_total(param);
-		get_mode(pstr, D_STAT, infos);
-		get_infos(pstr, D_STAT, param);
+		str = ft_memset(str, ' ', 31 + L_SZ + L_LK + L_US + L_GR);
+		get_mode(str, D_STAT, infos);
+		get_infos(str, D_STAT, param, infos);
 		ft_putstr(str);
-		ft_putchar(' ');
 	}
 	ft_putstr(D_NAME);
 	link = ft_strcpy(link, " -> ");

@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/18 09:09:56 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/18 16:53:54 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/26 12:40:56 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,15 @@ t_dirinfos	*new_dirinfos(char *dir_name, t_param *param)
 	D_NAME = ft_strdup(dir_name);
 	if (lstat(D_PATH, D_STAT) == -1)
 	{
-		perror(dir_name);
+		error_open(D_PATH, param);
 		free_dirinfos(infos, sizeof(*infos));
 		return (NULL);
 	}
 	else if (ft_strcmp(D_NAME, ".") && ft_strcmp(D_NAME, ".."))
+	{
 		update_param(infos->path, param);
+		if (ft_strstr(D_PATH, "/dev/"))
+			update_param_mima(infos->path, param);
+	}
 	return (infos);
 }
