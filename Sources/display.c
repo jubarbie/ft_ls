@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/16 23:04:48 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/26 16:46:40 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/27 18:09:49 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,25 @@ void		put_total(t_param *param)
 	ft_putchar('\n');
 }
 
+void		get_mode(char *str, t_stat *buf, t_dirinfos *infos)
+{
+	if (S_ISBLK(buf->st_mode))
+		str[0] = 'b';
+	else if (S_ISCHR(buf->st_mode))
+		str[0] = 'c';
+	else if (S_ISDIR(buf->st_mode))
+		str[0] = 'd';
+	else if (S_ISLNK(buf->st_mode))
+		str[0] = 'l';
+	else if (S_ISSOCK(buf->st_mode))
+		str[0] = 's';
+	else if (S_ISFIFO(buf->st_mode))
+		str[0] = 'p';
+	else if (S_ISREG(buf->st_mode))
+		str[0] = '-';
+	get_rights(str, buf, infos);
+}
+
 void		to_display(t_dirinfos *infos, t_param *param, int iter)
 {
 	char	*str;
@@ -37,7 +56,7 @@ void		to_display(t_dirinfos *infos, t_param *param, int iter)
 	if (!(str = ft_strnew(31 + L_SZ + L_LK + L_US + L_GR)) ||
 			!(link = ft_strnew(1024)))
 		exit(EXIT_FAILURE);
-	if (L)
+	if (L || G || O)
 	{
 		if (!iter)
 			put_total(param);

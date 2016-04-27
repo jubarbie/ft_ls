@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/18 17:50:08 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/26 16:46:37 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/27 18:15:23 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "libft.h"
 #include "ft_ls.h"
 
-static void	get_rights(char *str, t_stat *buf, t_dirinfos *infos)
+void		get_rights(char *str, t_stat *buf, t_dirinfos *infos)
 {
 	acl_t	acl;
 	int		i;
@@ -64,6 +64,7 @@ void		get_time(char *str, t_stat *buf, t_param *param)
 	}
 	else
 		str = ft_strncpy(++str, &ctime(&(btime))[4], 12);
+	*(str + 13) = '\0';
 }
 
 char		*get_mami(char *str, t_stat *buf, t_param *param)
@@ -88,6 +89,28 @@ char		*get_mami(char *str, t_stat *buf, t_param *param)
 	return (str);
 }
 
+char		*get_usrgr(char *str, t_stat *buf, t_param *param)
+{
+	if (!G)
+	{
+		str = ft_strcpy(++str, getpwuid(buf->st_uid)->pw_name);
+		str += ft_strlen(getpwuid(buf->st_uid)->pw_name);
+		*str = ' ';
+	}
+	else
+		str--;
+	if (!O)
+	{
+		str += L_US - ft_strlen(getpwuid(buf->st_uid)->pw_name) + 1;
+		str = ft_strcpy(++str, getgrgid(buf->st_gid)->gr_name);
+		str += ft_strlen(getgrgid(buf->st_gid)->gr_name);
+		*str = ' ';
+	}
+	else if (G)
+		str += 2;
+	return (str);
+}
+
 void		get_infos(char *str, t_stat *buf, t_param *param, t_dirinfos *infos)
 {
 	str += 12;
@@ -95,13 +118,7 @@ void		get_infos(char *str, t_stat *buf, t_param *param, t_dirinfos *infos)
 	str = ft_strcpy(str, ft_itoa(buf->st_nlink));
 	str += ft_nbrlen(buf->st_nlink);
 	*str = ' ';
-	str = ft_strcpy(++str, getpwuid(buf->st_uid)->pw_name);
-	str += ft_strlen(getpwuid(buf->st_uid)->pw_name);
-	*str = ' ';
-	str += L_US - ft_strlen(getpwuid(buf->st_uid)->pw_name) + 1;
-	str = ft_strcpy(++str, getgrgid(buf->st_gid)->gr_name);
-	str += ft_strlen(getgrgid(buf->st_gid)->gr_name);
-	*str = ' ';
+	str = get_usrgr(str, buf, param);
 	str += L_GR - ft_strlen(getgrgid(buf->st_gid)->gr_name) + 1;
 	if (!ft_strstr(D_PATH, "/dev/"))
 	{
@@ -113,23 +130,4 @@ void		get_infos(char *str, t_stat *buf, t_param *param, t_dirinfos *infos)
 	else
 		str = get_mami(str, buf, param);
 	get_time(str, buf, param);
-}
-
-void		get_mode(char *str, t_stat *buf, t_dirinfos *infos)
-{
-	if (S_ISBLK(buf->st_mode))
-		str[0] = 'b';
-	else if (S_ISCHR(buf->st_mode))
-		str[0] = 'c';
-	else if (S_ISDIR(buf->st_mode))
-		str[0] = 'd';
-	else if (S_ISLNK(buf->st_mode))
-		str[0] = 'l';
-	else if (S_ISSOCK(buf->st_mode))
-		str[0] = 's';
-	else if (S_ISFIFO(buf->st_mode))
-		str[0] = 'p';
-	else if (S_ISREG(buf->st_mode))
-		str[0] = '-';
-	get_rights(str, buf, infos);
 }

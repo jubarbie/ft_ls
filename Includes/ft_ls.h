@@ -6,21 +6,24 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 15:34:00 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/26 16:48:35 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/27 18:16:00 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
-# define OPT_REF "Ralrtu1"
+# define OPT_REF "ARaglortu1"
 # define OPT param->opt
-# define RR (OPT & (1 << 0))
-# define A (OPT & (1 << 1))
-# define L (OPT & (1 << 2))
-# define R (OPT & (1 << 3))
-# define T (OPT & (1 << 4))
-# define U (OPT & (1 << 5))
+# define AA (OPT & (1 << 0))
+# define RR (OPT & (1 << 1))
+# define A (OPT & (1 << 2))
+# define G (OPT & (1 << 3))
+# define L (OPT & (1 << 4))
+# define O (OPT & (1 << 5))
+# define R (OPT & (1 << 6))
+# define T (OPT & (1 << 7))
+# define U (OPT & (1 << 8))
 # define L_SZ param->len_size
 # define L_LK param->len_link
 # define L_US param->len_usr
@@ -38,7 +41,7 @@
 typedef struct stat	t_stat;
 typedef struct		s_param
 {
-	char			opt;
+	int				opt;
 	int				len_size;
 	int				len_ma;
 	int				len_mi;
@@ -79,7 +82,7 @@ void				print_lst(t_list *first, t_param *param, int iter);
 void				print_folder_name(char *str, t_param *param);
 
 void				put_total(t_param *param);
-void				get_mode(char *str, t_stat *buf, t_dirinfos *infos);
+void				get_rights(char *str, t_stat *buf, t_dirinfos *infos);
 void				get_infos(char *str, t_stat *buf, t_param *param,
 							t_dirinfos *infos);
 

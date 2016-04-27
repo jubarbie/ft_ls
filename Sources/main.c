@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/14 11:54:04 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/21 18:28:17 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/27 19:13:23 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "libft.h"
 #include "ft_ls.h"
 
-static int		in_opt(char c)
+static int		in_opt(int c)
 {
 	int		i;
 
@@ -30,7 +30,7 @@ static int		in_opt(char c)
 	return (-1);
 }
 
-static int		get_options(int ac, char **av, char *opt)
+static int		get_options(int ac, char **av, int *opt)
 {
 	int	i;
 	int	j;
@@ -61,7 +61,7 @@ int				main(int ac, char **av)
 {
 	int			i;
 	int			j;
-	char		opt;
+	int			opt;
 	t_param		*param;
 	static char	*dir = ".";
 
@@ -74,7 +74,7 @@ int				main(int ac, char **av)
 		if ((j = sort_arg(AC, &(av[i]), param)))
 			ft_ls(j, &(av[i]), param);
 		if (j && AC - j)
-			putchar('\n');
+			ft_putchar('\n');
 		if (AC - j)
 			ft_ls(AC - j, &(av[i + j]), param);
 	}

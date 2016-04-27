@@ -6,7 +6,7 @@
 /*   By: jubarbie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/18 18:05:13 by jubarbie          #+#    #+#             */
-/*   Updated: 2016/04/21 19:55:19 by jubarbie         ###   ########.fr       */
+/*   Updated: 2016/04/27 16:34:55 by jubarbie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,10 @@ static t_list	*create_list(DIR *dir, char *dir_name,
 	print_folder_name(dir_name, param);
 	reinit_param(dir_name, param);
 	while ((file = readdir(dir)))
-		if (A || (!A && file->d_name[0] != '.'))
-			lst_insert(&first, file->d_name, param);
+		if (A || (!A && AA) || (!A && file->d_name[0] != '.'))
+			if (!AA || (AA && !A && (ft_strcmp(file->d_name, "..") &&
+								ft_strcmp(file->d_name, "."))) || (AA && A))
+				lst_insert(&first, file->d_name, param);
 	print_lst(first, param, 0);
 	closedir(dir);
 	return (first);
